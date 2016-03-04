@@ -1,8 +1,6 @@
 package com.example.shikha.foursquare_api;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,12 +23,13 @@ import android.widget.ArrayAdapter;
 
 public class AndroidFoursquare extends ListActivity {
     ArrayList<FoursquareVenue> venuesList;
+    GpsTracker gps;
 
     final String CLIENT_ID = "KOH4Y1ZOGQA21THTQVLD4LXH0H4XQENCT4IEQHB4OE5JOZEG";
     final String CLIENT_SECRET = "RYBV3W2KLEI4P1JEVF03ORLNGJK4O2QI3WWKCEBBRWFUSUAY";
 
-    double latitude=10.30;
-    double longitude=23.87;
+    double latitude;
+    double longitude;
 
 
     ArrayAdapter<String> myAdapter;
@@ -39,6 +38,23 @@ public class AndroidFoursquare extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        gps = new GpsTracker(AndroidFoursquare.this);
+
+
+        if (gps.canGetLocation()) {
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+
+            //	Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+        } else {
+
+            gps.showSettingsAlert();
+        }
+
+
+
 
 
         new fourquare().execute();
